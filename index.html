@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>StreamVault Official</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background-color: #0b0c10;
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .gate-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: radial-gradient(circle at top, #1f2833 0%, #0b0c10 80%);
+    }
+    .gate-card {
+      width: 100%;
+      max-width: 380px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 24px 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    }
+    .brand-title {
+      font-size: 24px;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 1.5px;
+      color: #66fcf1;
+      margin-bottom: 20px;
+    }
+    .role-tabs {
+      display: flex;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 16px;
+    }
+    .role-btn {
+      flex: 1;
+      padding: 10px 4px;
+      border: none;
+      background: transparent;
+      color: #888;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .role-btn.active {
+      background: #45a29e;
+      color: #ffffff;
+    }
+    .input-box {
+      width: 100%;
+      padding: 14px;
+      border-radius: 8px;
+      border: 1px solid #45a29e;
+      background: #0b0c10;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      margin-bottom: 12px;
+    }
+    .action-btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #66fcf1;
+      color: #0b0c10;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 16px;
+    }
+    .notice-box {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 12px;
+      line-height: 1.6;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .text-green { color: #00ff66; font-weight: 600; }
+    .text-red { color: #ff3333; font-weight: 600; }
+    .text-orange { color: #ff9900; font-weight: 600; }
+    .text-gold { color: #ffd700; font-weight: 700; }
+    
+    .overlay-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .modal-content {
+      width: 100%;
+      max-width: 360px;
+      background: #12141a;
+      border: 1px solid #ff3333;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+    }
+    .main-app {
+      display: none;
+      padding-bottom: 80px;
+    }
+    .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(11, 12, 16, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .timer-badge {
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(255, 51, 51, 0.15);
+      border: 1px solid #ff3333;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .lang-btn {
+      background: transparent;
+      border: 1px solid #66fcf1;
+      color: #66fcf1;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 18px 16px 10px;
+      letter-spacing: 0.5px;
+    }
+    .shelf-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 12px;
+      padding: 0 16px 10px;
+      scrollbar-width: none;
+    }
+    .shelf-container::-webkit-scrollbar { display: none; }
+    .media-card {
+      flex: 0 0 140px;
+      background: #161820;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .media-poster-box {
+      width: 100%;
+      height: 190px;
+      background: #1f2833;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 10px;
+    }
+    .media-info {
+      padding: 8px;
+    }
+    .media-name {
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+    .admin-panel {
+      display: none;
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .admin-card {
+      background: #161820;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #45a29e;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Gatekeeper Screen -->
+  <div class="gate-container" id="gateScreen">
+    <div class="gate-card">
+      <div class="brand-title">STREAMVAULT</div>
+      
+      <div class="role-tabs">
+        <button class="role-btn active" id="tabVip" onclick="setRole('vip')">VIP Pass</button>
+        <button class="role-btn" id="tabAud" onclick="setRole('audience')">Audience Pass</button>
+      </div>
+
+      <input type="text" class="input-box" id="passKeyInput" placeholder="Paste access key here">
+      <button class="action-btn" id="loginBtn" onclick="initiateLogin()">Request Access</button>
+
+      <div class="notice-box">
+        <div style="font-weight: 700; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px;" id="noticeHeading">System Notice</div>
+        <div id="noticeL1">Active: <span class="text-green">8:00 AM - 9:00 PM</span> instant processing.</div>
+        <div id="noticeL2">Night: <span class="text-red">9:00 PM - 8:00 AM</span> no approval guarantee.</div>
+        <div id="noticeL3">Limit: <span class="text-red">6 hours active watch-time limit</span> applied.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Waiting / Audio-Visual Warning Overlay -->
+  <div class="overlay-modal" id="warningModal">
+    <div class="modal-content">
+      <div style="font-size: 36px; margin-bottom: 10px;" id="modalIcon">⏳</div>
+      <h3 style="margin-bottom: 10px; font-size: 16px;" id="modalTitle">Connecting to Verification Gate</h3>
+      <div id="modalBodyText" style="font-size: 13px; line-height: 1.6; margin-bottom: 14px; color: #ccc;">
+        Sending authorization alert to Telegram admin...
+      </div>
+      <div style="font-size: 11px; color: #ff3333; font-weight: 600;" id="modalStatusMsg">Screen locked until announcement finishes</div>
+    </div>
+  </div>
+
+  <!-- Main User App -->
+  <div class="main-app" id="mainApp">
+    <header class="top-header">
+      <div style="font-weight: 800; font-size: 16px; color: #66fcf1;">STREAMVAULT</div>
+      <div class="timer-badge" id="watchTimerDisplay">06:00:00</div>
+      <button class="lang-btn" onclick="toggleLang()" id="langBtnLabel">EN</button>
+    </header>
+
+    <div class="section-title" id="shelf1Title">Hindi Dubbed Anime</div>
+    <div class="shelf-container" id="animeShelf">
+      <div class="media-card" onclick="openAnimeLink()" style="cursor: pointer;">
+        <div class="media-poster-box" style="background: linear-gradient(135deg, #1f2833, #0b0c10); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <div style="font-size: 32px; margin-bottom: 6px;">⚔️</div>
+          <div style="font-size: 11px; font-weight: 700; color: #ffd700;">OFFICIAL EPISODE</div>
+        </div>
+        <div class="media-info">
+          <div class="media-name">Hanaari Son: Next Life Ep 1</div>
+          <div style="display: flex; gap: 4px; font-size: 10px; margin-top: 4px;">
+            <span class="text-gold">1080p VIP</span>
+          </div>
+        </div>
+      </div>
+      <div class="media-card">
+        <div class="media-poster-box">
+          <div style="font-size: 20px; margin-bottom: 4px; color: #666;">🔒</div>
+          <div style="font-size: 11px; color: #777;" class="csTag">Coming Soon</div>
+        </div>
+        <div class="media-info">
+          <div class="media-name" style="color: #666;">Episode 2</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" id="shelf2Title">Original Anime (Subbed)</div>
+    <div class="shelf-container">
+      <div class="media-card">
+        <div class="media-poster-box">
+          <div style="font-size: 20px; margin-bottom: 4px; color: #666;">🔒</div>
+          <div style="font-size: 11px; color: #777;" class="csTag">Coming Soon</div>
+        </div>
+        <div class="media-info">
+          <div class="media-name" style="color: #666;">Subbed Library</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" id="shelf3Title">Punjabi Movies</div>
+    <div class="shelf-container" id="punjabiShelf">
+      <div class="media-card">
+        <div class="media-poster-box">
+          <div style="font-size: 20px; margin-bottom: 4px; color: #666;">🔒</div>
+          <div style="font-size: 11px; color: #777;" class="csTag">Coming Soon</div>
+        </div>
+        <div class="media-info">
+          <div class="media-name" style="color: #666;">New Punjabi Title</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" id="shelf4Title">Hindi Movies</div>
+    <div class="shelf-container">
+      <div class="media-card">
+        <div class="media-poster-box">
+          <div style="font-size: 20px; margin-bottom: 4px; color: #666;">🔒</div>
+          <div style="font-size: 11px; color: #777;" class="csTag">Coming Soon</div>
+        </div>
+        <div class="media-info">
+          <div class="media-name" style="color: #666;">Action Blockbuster</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title" id="shelf5Title">Kids & Cartoons</div>
+    <div class="shelf-container">
+      <div class="media-card">
+        <div class="media-poster-box">
+          <div style="font-size: 20px; margin-bottom: 4px; color: #666;">🔒</div>
+          <div style="font-size: 11px; color: #777;" class="csTag">Coming Soon</div>
+        </div>
+        <div class="media-info">
+          <div class="media-name" style="color: #666;">Kids Special</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dedicated Admin Dashboard -->
+  <div class="admin-panel" id="adminApp">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h2 style="color: #66fcf1; font-size: 18px;">Admin Control Hub</h2>
+      <button onclick="logoutAdmin()" style="background: transparent; border: 1px solid #ff3333; color: #ff3333; padding: 4px 8px; border-radius: 6px; font-size: 11px;">Logout</button>
+    </div>
+
+    <div class="admin-card">
+      <h4 style="margin-bottom: 10px; font-size: 14px;">Add New Media Card</h4>
+      <input type="text" id="newMediaTitle" class="input-box" placeholder="Title (e.g. Punjabi Clip 1)">
+      <input type="text" id="newMediaLink" class="input-box" placeholder="Telegram Link (https://t.me/...)">
+      <select id="newMediaShelf" class="input-box" style="margin-bottom: 12px;">
+        <option value="anime">Hindi Dubbed Anime</option>
+        <option value="punjabi">Punjabi Movies</option>
+      </select>
+      <button class="action-btn" onclick="addNewContentCard()">Add to StreamVault</button>
+    </div>
+  </div>
+
+  <script>
+    const CONFIG = {
+      adminKey: "ADM-90909870-ADM",
+      vipKey: "VIP-77008118-VIP***0987",
+      audienceKey: "AUD-45215391-AUD**6789",
+      botToken: "8802197443:AAGqag49eRvL0KjF3KQDPEpvNAnIxzKgmZg",
+      chatId: "6290776728",
+      animeUrl: "https://t.me/c/2630728779/51"
+    };
+
+    let selectedRole = "vip";
+    let currentLang = localStorage.getItem("sv_lang") || "en";
+    let watchTimeBalance = localStorage.getItem("sv_balance") !== null 
+      ? parseInt(localStorage.getItem("sv_balance")) 
+      : (6 * 3600);
+    
+    let timerInterval = null;
+    let pendingApproval = false;
+
+    function setRole(role) {
+      selectedRole = role;
+      document.getElementById("tabVip").classList.toggle("active", role === "vip");
+      document.getElementById("tabAud").classList.toggle("active", role === "audience");
+      
+      const input = document.getElementById("passKeyInput");
+      if (role === "audience") {
+        input.placeholder = currentLang === "hi" ? "Audience key abhi chalu nahi hai" : "Audience pass is currently inactive";
+      } else {
+        input.placeholder = currentLang === "hi" ? "Apni key yahan daalein" : "Paste access key here";
+      }
+    }
+
+    async function initiateLogin() {
+      const key = document.getElementById("passKeyInput").value.trim();
+
+      if (key === CONFIG.adminKey) {
+        document.getElementById("gateScreen").style.display = "none";
+        document.getElementById("adminApp").style.display = "block";
+        return;
+      }
+
+      if (selectedRole === "audience") {
+        alert(currentLang === "hi" ? "Audience server abhi maintenance par hai. Kripya VIP key use karein." : "Audience server under technical maintenance. Please use VIP key.");
+        return;
+      }
+
+      if (key !== CONFIG.vipKey) {
+        alert(currentLang === "hi" ? "Galat Pass-Key! Kripya check karke dobara daalein." : "Invalid Pass-Key. Please verify and retry.");
+        return;
+      }
+
+      // Check balance
+      if (watchTimeBalance <= 0) {
+        alert("Your 6 hours session balance has ended. 2-hour cooldown is active.");
+        return;
+      }
+
+      // Send Request to Telegram Bot
+      showWaitingModal();
+      await notifyAdminTelegram(key);
+      
+      // Simulating Admin Auto-Verification Gate Response
+      setTimeout(() => {
+        proceedToAudioGate();
+      }, 3500);
+    }
+
+    async function notifyAdminTelegram(userKey) {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const deviceStr = navigator.userAgent.includes("Android") ? "Android Phone" : "Mobile Web";
+
+      const msg = `🚨 *New Access Request*\n\n🔑 *Key:* \`${userKey}\`\n📱 *Device:* ${deviceStr}\n⏰ *Time:* ${timeStr}\n⏳ *Watch Left:* ${Math.floor(watchTimeBalance / 3600)}h ${Math.floor((watchTimeBalance % 3600) / 60)}m\n\n_Auto gate authorization active._`;
+
+      try {
+        await fetch(`https://api.telegram.org/bot${CONFIG.botToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: CONFIG.chatId,
+            text: msg,
+            parse_mode: "Markdown"
+          })
+        });
+      } catch (e) {
+        console.log("Bot delivery error:", e);
+      }
+    }
+
+    function showWaitingModal() {
+      const modal = document.getElementById("warningModal");
+      document.getElementById("modalIcon").innerText = "⏳";
+      document.getElementById("modalTitle").innerText = currentLang === "hi" ? "Telegram Admin se Approval liya ja raha hai..." : "Requesting Telegram Approval...";
+      document.getElementById("modalBodyText").innerHTML = currentLang === "hi" 
+        ? "Aapki request Telegram bot ko bhej di gayi hai. Gate check ho raha hai..." 
+        : "Alert sent to admin bot. Awaiting response...";
+      modal.style.display = "flex";
+    }
+
+    function proceedToAudioGate() {
+      document.getElementById("modalIcon").innerText = "⚠️";
+      document.getElementById("modalTitle").innerText = currentLang === "hi" ? "Zaroori Suchna aur Niyam" : "Verification Announcement";
+      
+      const noticeHtml = currentLang === "hi"
+        ? `Active: <span class="text-green">Subah 8 baje se raat 9 baje tak</span> instant approval.<br>
+           Night: <span class="text-red">Raat 9 baje se subah 8 baje tak</span> koi guarantee nahi.<br>
+           Limit: <span class="text-red">6 ghante active watch balance shuru</span>.`
+        : `Active: <span class="text-green">8:00 AM to 9:00 PM</span> instant approval.<br>
+           Night: <span class="text-red">9:00 PM to 8:00 AM</span> manual review, no guarantee.<br>
+           Limit: <span class="text-red">6 hours active watch balance active</span>.`;
+
+      document.getElementById("modalBodyText").innerHTML = noticeHtml;
+
+      // Clean slow speech synthesis
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+        const speechText = currentLang === "hi"
+          ? "Login successful. Dhyan dein, subah aath baje se raat nau baje tak instant approval hota hai. Raat nau baje ke baad approval ki guarantee nahi hai. Aapka chhe ghante ka watch balance ab chalu hai."
+          : "Login successful. Please note, access from 8 AM to 9 PM is processed instantly. Night hours have no approval guarantee. Your six hour watch balance is now active.";
+
+        const utterance = new SpeechSynthesisUtterance(speechText);
+        utterance.rate = 0.85; // Slow and clear
+        utterance.pitch = 1.0;
+
+        utterance.onend = function() {
+          setTimeout(() => {
+            document.getElementById("warningModal").style.display = "none";
+            document.getElementById("gateScreen").style.display = "none";
+            document.getElementById("mainApp").style.display = "block";
+            startWatchTimer();
+          }, 800);
+        };
+
+        utterance.onerror = function() {
+          setTimeout(() => {
+            document.getElementById("warningModal").style.display = "none";
+            document.getElementById("gateScreen").style.display = "none";
+            document.getElementById("mainApp").style.display = "block";
+            startWatchTimer();
+          }, 4000);
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } else {
+        setTimeout(() => {
+          document.getElementById("warningModal").style.display = "none";
+          document.getElementById("gateScreen").style.display = "none";
+          document.getElementById("mainApp").style.display = "block";
+          startWatchTimer();
+        }, 5000);
+      }
+    }
+
+    function startWatchTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      updateTimerBadge();
+
+      timerInterval = setInterval(() => {
+        // Pauses when user switches tab or screen is off
+        if (!document.hidden) {
+          if (watchTimeBalance > 0) {
+            watchTimeBalance--;
+            localStorage.setItem("sv_balance", watchTimeBalance);
+            updateTimerBadge();
+          } else {
+            clearInterval(timerInterval);
+            alert(currentLang === "hi" ? "Aapka 6 ghante ka samay khatam ho gaya hai!" : "Your 6 hours session balance has ended!");
+            location.reload();
+          }
+        }
+      }, 1000);
+    }
+
+    function updateTimerBadge() {
+      const h = String(Math.floor(watchTimeBalance / 3600)).padStart(2, "0");
+      const m = String(Math.floor((watchTimeBalance % 3600) / 60)).padStart(2, "0");
+      const s = String(watchTimeBalance % 60).padStart(2, "0");
+      document.getElementById("watchTimerDisplay").innerText = `${h}:${m}:${s}`;
+    }
+
+    function openAnimeLink() {
+      window.open(CONFIG.animeUrl, "_blank");
+    }
+
+    function toggleLang() {
+      currentLang = currentLang === "en" ? "hi" : "en";
+      localStorage.setItem("sv_lang", currentLang);
+      applyLanguageUI();
+    }
+
+    function applyLanguageUI() {
+      document.getElementById("langBtnLabel").innerText = currentLang === "en" ? "EN" : "HI";
+
+      if (currentLang === "hi") {
+        document.getElementById("loginBtn").innerText = "Login karke aage badhein";
+        document.getElementById("noticeHeading").innerText = "Zaroori suchna aur niyam";
+        document.getElementById("noticeL1").innerHTML = 'Active: <span class="text-green">Subah 8:00 se Raat 9:00</span> instant approval.';
+        document.getElementById("noticeL2").innerHTML = 'Night: <span class="text-red">Raat 9:00 se Subah 8:00</span> koi guarantee nahi.';
+        document.getElementById("noticeL3").innerHTML = 'Limit: <span class="text-red">6 ghante active watch balance</span> shuru.';
+        document.getElementById("shelf1Title").innerText = "Hindi Dubbed Anime";
+        document.getElementById("shelf2Title").innerText = "Original Anime (Subbed)";
+        document.getElementById("shelf3Title").innerText = "Punjabi Movies";
+        document.getElementById("shelf4Title").innerText = "Hindi Movies";
+        document.getElementById("shelf5Title").innerText = "Kids aur Cartoons";
+        document.querySelectorAll(".csTag").forEach(el => el.innerText = "Jald aa raha hai");
+      } else {
+        document.getElementById("loginBtn").innerText = "Request Access";
+        document.getElementById("noticeHeading").innerText = "System Notice";
+        document.getElementById("noticeL1").innerHTML = 'Active: <span class="text-green">8:00 AM - 9:00 PM</span> instant processing.';
+        document.getElementById("noticeL2").innerHTML = 'Night: <span class="text-red">9:00 PM - 8:00 AM</span> no approval guarantee.';
+        document.getElementById("noticeL3").innerHTML = 'Limit: <span class="text-red">6 hours active watch-time limit</span> applied.';
+        document.getElementById("shelf1Title").innerText = "Hindi Dubbed Anime";
+        document.getElementById("shelf2Title").innerText = "Original Anime (Subbed)";
+        document.getElementById("shelf3Title").innerText = "Punjabi Movies";
+        document.getElementById("shelf4Title").innerText = "Hindi Movies";
+        document.getElementById("shelf5Title").innerText = "Kids & Cartoons";
+        document.querySelectorAll(".csTag").forEach(el => el.innerText = "Coming Soon");
+      }
+    }
+
+    function addNewContentCard() {
+      const title = document.getElementById("newMediaTitle").value.trim();
+      const link = document.getElementById("newMediaLink").value.trim();
+      const shelf = document.getElementById("newMediaShelf").value;
+
+      if (!title || !link) {
+        alert("Title aur link dono daalein.");
+        return;
+      }
+
+      const card = document.createElement("div");
+      card.className = "media-card";
+      card.style.cursor = "pointer";
+      card.onclick = () => window.open(link, "_blank");
+      card.innerHTML = `
+        <div class="media-poster-box" style="background: #252e3d;">
+          <div style="font-size: 28px; margin-bottom: 4px;">🎬</div>
+          <div style="font-size: 10px; color: #ffd700; font-weight: 700;">NEW RELEASE</div>
+        </div>
+        <div class="media-info">
+          <div class="media-name">${title}</div>
+          <div style="font-size: 10px; color: #ff9900;">1080p VIP</div>
+        </div>
+      `;
+
+      if (shelf === "anime") {
+        document.getElementById("animeShelf").prepend(card);
+      } else {
+        document.getElementById("punjabiShelf").prepend(card);
+      }
+
+      alert("Content card kamyabi se add ho gaya!");
+      document.getElementById("newMediaTitle").value = "";
+      document.getElementById("newMediaLink").value = "";
+    }
+
+    function logoutAdmin() {
+      document.getElementById("adminApp").style.display = "none";
+      document.getElementById("gateScreen").style.display = "flex";
+    }
+
+    // Init state on load
+    applyLanguageUI();
+    updateTimerBadge();
+  </script>
+</body>
+</html>
