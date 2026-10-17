@@ -121,6 +121,7 @@
     .text-orange { color: #ff9900; font-weight: 600; }
     .text-gold { color: #ffd700; font-weight: 700; }
     
+    /* पॉप-अप मॉडल्स */
     .overlay-modal {
       display: none;
       position: fixed;
@@ -140,6 +141,24 @@
       padding: 24px;
       text-align: center;
     }
+
+    /* क्लीन कस्टम अलर्ट बॉक्स (बिना किसी यूआरएल के) */
+    .custom-alert-box {
+      border-color: #45a29e;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+    }
+    .custom-alert-btn {
+      margin-top: 15px;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 6px;
+      background: #66fcf1;
+      color: #0b0c10;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
     .main-app {
       display: none;
       padding-bottom: 80px;
@@ -267,6 +286,16 @@
     </div>
   </div>
 
+  <!-- क्लीन कस्टम पॉप-अप (इसमें harsh123444 या URL कभी नहीं दिखेगा) -->
+  <div class="overlay-modal" id="customAlertModal">
+    <div class="modal-content custom-alert-box">
+      <div style="font-size: 32px; margin-bottom: 10px;" id="alertIcon">⚠️</div>
+      <h3 style="margin-bottom: 8px; font-size: 15px; color: #66fcf1;" id="alertTitle">सूचना</h3>
+      <div id="alertMessage" style="font-size: 13px; line-height: 1.6; color: #ccc;"></div>
+      <button class="custom-alert-btn" onclick="closeCustomAlert()">समझ गया (OK)</button>
+    </div>
+  </div>
+
   <!-- Waiting / Audio-Visual Warning Overlay -->
   <div class="overlay-modal" id="warningModal">
     <div class="modal-content">
@@ -293,7 +322,7 @@
     <div class="section-title" id="shelf1Title">Hindi Dubbed Anime</div>
     <div class="shelf-container" id="animeShelf">
       
-      <!-- New Poster Card Added From Direct Link -->
+      <!-- पोस्टर कार्ड -->
       <div class="media-card" onclick="openAnimeLink()" style="cursor: pointer;">
         <div class="media-poster-box">
           <img src="https://i.postimg.cc/qqG3hvYB/Screenshot-2026-1017-213611.png" alt="Anime Poster">
@@ -408,7 +437,19 @@
     let timerInterval = null;
     let isServerOfflineTime = false;
 
-    // Server Schedule Logic: 9:00 PM to 8:00 AM server OFF for new logins
+    // क्लीन कस्टम पॉप-अप ट्रिगर
+    function showCustomAlert(title, message, icon = "⚠️") {
+      document.getElementById("alertTitle").innerText = title;
+      document.getElementById("alertMessage").innerHTML = message;
+      document.getElementById("alertIcon").innerText = icon;
+      document.getElementById("customAlertModal").style.display = "flex";
+    }
+
+    function closeCustomAlert() {
+      document.getElementById("customAlertModal").style.display = "none";
+    }
+
+    // सर्वर टाइम चेक
     function checkLiveServerStatus() {
       const currentHour = new Date().getHours();
       isServerOfflineTime = (currentHour >= 21 || currentHour < 8);
@@ -456,45 +497,54 @@
     async function initiateLogin() {
       const key = document.getElementById("passKeyInput").value.trim();
 
-      // Admin access anytime
+      // 1. एडमिन की (24 घंटे पूरी छूट)
       if (key === CONFIG.adminKey) {
         document.getElementById("gateScreen").style.display = "none";
         document.getElementById("adminApp").style.display = "block";
         return;
       }
 
-      // Check night hours block for non-admin users
-      if (isServerOfflineTime) {
-        alert(currentLang === "hi" 
-          ? "रात 9:00 बजे के बाद नए लॉगिन के लिए सर्वर ऑफ है। केवल पहले से एक्टिव सत्र काम करेंगे। कृपया सुबह 8:00 बजे प्रयास करें।" 
-          : "Server is currently OFFLINE for new logins (Night Mode: 9 PM - 8 AM). Active sessions can continue.");
+      // 2. आपकी VIP की (इस पर कोई रात/दिन की रोक नहीं होगी - 24 घंटे चलेगी)
+      if (key === CONFIG.vipKey) {
+        showWaitingModal();
+        await notifyAdminTelegram(key);
+        setTimeout(() => {
+          proceedToAudioGate();
+        }, 3500);
         return;
       }
 
+      // 3. ऑडियंस पास अभी बंद है
       if (selectedRole === "audience") {
-        alert(currentLang === "hi" ? "Audience server abhi maintenance par hai. Kripya VIP key use karein." : "Audience server under technical maintenance. Please use VIP key.");
+        showCustomAlert(
+          "Notice", 
+          currentLang === "hi" 
+            ? "Audience server abhi maintenance par hai. Kripya VIP key use karein." 
+            : "Audience server under technical maintenance. Please use VIP key."
+        );
         return;
       }
 
-      if (key !== CONFIG.vipKey) {
-        alert(currentLang === "hi" ? "Galat Pass-Key! Kripya check karke dobara daalein." : "Invalid Pass-Key. Please verify and retry.");
+      // 4. अगर रात का समय है तो अन्य नए यूज़र्स को ब्लॉक करें
+      if (isServerOfflineTime) {
+        showCustomAlert(
+          "Server Offline", 
+          currentLang === "hi"
+            ? "रात 9:00 बजे के बाद नए लॉगिन के लिए सर्वर ऑफ है। केवल पहले से एक्टिव सत्र काम करेंगे। कृपया सुबह 8:00 बजे प्रयास करें।"
+            : "Server is currently OFFLINE for new logins (Night Mode: 9 PM - 8 AM). Active sessions can continue.",
+          "🌙"
+        );
         return;
       }
 
-      // Check balance
-      if (watchTimeBalance <= 0) {
-        alert("Your 6 hours session balance has ended. 2-hour cooldown is active.");
-        return;
-      }
-
-      // Send Request to Telegram Bot
-      showWaitingModal();
-      await notifyAdminTelegram(key);
-      
-      // Simulating Admin Auto-Verification Gate Response
-      setTimeout(() => {
-        proceedToAudioGate();
-      }, 3500);
+      // 5. अमान्य की
+      showCustomAlert(
+        "Access Denied", 
+        currentLang === "hi" 
+          ? "Galat Pass-Key! Kripya check karke dobara daalein." 
+          : "Invalid Pass-Key. Please verify and retry.",
+        "❌"
+      );
     }
 
     async function notifyAdminTelegram(userKey) {
@@ -594,8 +644,8 @@
             updateTimerBadge();
           } else {
             clearInterval(timerInterval);
-            alert(currentLang === "hi" ? "Aapka 6 ghante ka samay khatam ho gaya hai!" : "Your 6 hours session balance has ended!");
-            location.reload();
+            showCustomAlert("Time Expired", currentLang === "hi" ? "Aapka 6 ghante ka samay khatam ho gaya hai!" : "Your 6 hours session balance has ended!");
+            setTimeout(() => location.reload(), 2000);
           }
         }
       }, 1000);
@@ -655,7 +705,7 @@
       const shelf = document.getElementById("newMediaShelf").value;
 
       if (!title || !link) {
-        alert("Title aur link dono daalein.");
+        showCustomAlert("Error", "Title aur link dono daalein.");
         return;
       }
 
@@ -680,7 +730,7 @@
         document.getElementById("punjabiShelf").prepend(card);
       }
 
-      alert("Content card kamyabi se add ho gaya!");
+      showCustomAlert("Success", "Content card kamyabi se add ho gaya!", "✅");
       document.getElementById("newMediaTitle").value = "";
       document.getElementById("newMediaLink").value = "";
     }
