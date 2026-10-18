@@ -837,13 +837,24 @@
       alert(currentLang === "hi" ? "गलत पास-की! कृपया सही की दर्ज करें।" : "Invalid Pass-Key. Please verify and retry.");
     }
 
-    // टेलीग्राम बॉट को आईपी और अलर्ट भेजना
+        let approvalPollInterval = null;
+
+    // टेलीग्राम पर अलर्ट और बटन भेजना + पोलिंग शुरू करना
     async function notifyAdminTelegram(userKey, ipAddress) {
       const now = new Date();
       const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const deviceStr = navigator.userAgent.includes("Android") ? "Android Device" : "Mobile Browser";
+      const deviceStr = navigator.userAgent.includes("Android") ? "Android Phone" : "Mobile Web";
 
-      const msg = `🚨 *New StreamVault Login Request*\n━━━━━━━━━━━━━━━━━━\n🔑 *Key:* \`${userKey}\`\n🌐 *IP Address:* \`${ipAddress}\`\n📱 *Device:* ${deviceStr}\n⏰ *Time:* ${timeStr}\n⏳ *Wait Time:* 2 Minutes\n━━━━━━━━━━━━━━━━━━\n_Awaiting gate authorization._`;
+      const msg = `🚨 *नई लॉगिन रिक्वेस्ट!*\n━━━━━━━━━━━━━━━━━━\n🔑 *Key:* \`${userKey}\`\n🌐 *IP:* \`${ipAddress}\`\n📱 *डिवाइस:* ${deviceStr}\n⏰ *समय:* ${timeStr}\n⏳ *वेट टाइम:* 2 मिनट\n━━━━━━━━━━━━━━━━━━\n_क्या आप इस यूजर को एक्सेस देना चाहते हैं?_`;
+
+      const keyboard = {
+        inline_keyboard: [
+          [
+            { text: "✅ Approve", callback_data: `approve_${userKey}` },
+            { text: "❌ Reject", callback_data: `reject_${userKey}` }
+          ]
+        ]
+      };
 
       try {
         await fetch(`https://api.telegram.org/bot${CONFIG.botToken}/sendMessage`, {
@@ -852,23 +863,28 @@
           body: JSON.stringify({
             chat_id: CONFIG.chatId,
             text: msg,
-            parse_mode: "Markdown"
+            parse_mode: "Markdown",
+            reply_markup: keyboard
           })
         });
+
+        // टेलीग्राम से तुम्हारे फैसले का इंतज़ार करना
+        listenForTelegramDecision(userKey);
       } catch (e) {
-        console.log("Bot delivery error:", e);
+        console.log("Telegram alert error:", e);
       }
     }
 
-    // 2 मिनट का लाइव काउंटडाउन गेट
+    // 2 मिनट का लाइव काउंटडाउन गेट (ऑटो-लॉगिन पूरी तरह बंद)
     function startTwoMinuteWaitGate() {
       openModal("waitingApprovalModal");
-      let totalSeconds = 120; // 2 मिनट = 120 सेकंड
+      let totalSeconds = 120; // पूरा 2 मिनट
 
       const updateWaitUI = () => {
         const m = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
         const s = String(totalSeconds % 60).padStart(2, "0");
-        document.getElementById("waitTimerNum").innerText = `${m}:${s}`;
+        const timerElem = document.getElementById("waitTimerNum");
+        if (timerElem) timerElem.innerText = `${m}:${s}`;
       };
 
       updateWaitUI();
@@ -880,19 +896,68 @@
 
         if (totalSeconds <= 0) {
           clearInterval(waitInterval);
+          if (approvalPollInterval) clearInterval(approvalPollInterval);
           closeModal("waitingApprovalModal");
-          proceedToAudioGate();
+          alert("समय समाप्त! एडमिन ने रिक्वेस्ट अप्रूव नहीं की।");
         }
       }, 1000);
-
-      // टेस्टिंग के लिए: 4 सेकंड बाद अपने-आप ऑडियो गेट पर ले जाएगा
-      setTimeout(() => {
-        clearInterval(waitInterval);
-        closeModal("waitingApprovalModal");
-        proceedToAudioGate();
-      }, 4000);
     }
 
+    // टेलीग्राम बॉट से अप्रूव या रिजेक्ट चेक करना
+    async function listenForTelegramDecision(userKey) {
+      let lastUpdateId = 0;
+
+      // पहले पुराने अपडेट्स का ऑफसेट सेट करना
+      try {
+        const initRes = await fetch(`https://api.telegram.org/bot${CONFIG.botToken}/getUpdates`);
+        const initData = await initRes.json();
+        if (initData.result && initData.result.length > 0) {
+          lastUpdateId = initData.result[initData.result.length - 1].update_id + 1;
+        }
+      } catch (e) {}
+
+      if (approvalPollInterval) clearInterval(approvalPollInterval);
+
+      // हर 2.5 सेकंड में बॉट से पूछना कि एडमिन ने कौन सा बटन दबाया
+      approvalPollInterval = setInterval(async () => {
+        try {
+          const res = await fetch(`https://api.telegram.org/bot${CONFIG.botToken}/getUpdates?offset=${lastUpdateId}`);
+          const data = await res.json();
+
+          if (data.result && data.result.length > 0) {
+            for (let update of data.result) {
+              lastUpdateId = update.update_id + 1;
+
+              if (update.callback_query) {
+                const action = update.callback_query.data;
+
+                // अगर तुमने टेलीग्राम पर Approve दबाया
+                if (action === `approve_${userKey}`) {
+                  clearInterval(approvalPollInterval);
+                  if (waitInterval) clearInterval(waitInterval);
+                  closeModal("waitingApprovalModal");
+                  proceedToAudioGate();
+                  return;
+                }
+
+                // अगर तुमने टेलीग्राम पर Reject दबाया
+                if (action === `reject_${userKey}`) {
+                  clearInterval(approvalPollInterval);
+                  if (waitInterval) clearInterval(waitInterval);
+                  closeModal("waitingApprovalModal");
+                  alert("आपकी रिक्वेस्ट एडमिन द्वारा रिजेक्ट कर दी गई है।");
+                  return;
+                }
+              }
+            }
+          }
+        } catch (err) {
+          console.log("Polling error:", err);
+        }
+      }, 2500);
+    }
+
+    
     // शांत और मध्यम हिंदी वॉइस
     function proceedToAudioGate() {
       if ("speechSynthesis" in window) {
