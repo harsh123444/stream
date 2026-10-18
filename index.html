@@ -14,7 +14,7 @@
       -webkit-tap-highlight-color: transparent;
     }
     body {
-      background-color: #0b0c10;
+      background: #030814 radial-gradient(circle at 50% 20%, #0d223a 0%, #05101f 55%, #02060d 100%) no-repeat fixed;
       color: #ffffff;
       min-height: 100vh;
       overflow-x: hidden;
@@ -23,13 +23,13 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 12px;
+      padding: 6px 14px;
       border-radius: 20px;
       font-size: 11px;
       font-weight: 700;
       margin-bottom: 14px;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
     .status-dot {
       font-size: 10px;
@@ -41,59 +41,67 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
-      background: radial-gradient(circle at top, #1f2833 0%, #0b0c10 80%);
+      background: radial-gradient(circle at 50% 30%, rgba(16, 52, 89, 0.5) 0%, rgba(2, 6, 13, 0.95) 80%);
     }
     .gate-card {
       width: 100%;
       max-width: 380px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
+      background: rgba(10, 20, 35, 0.75);
+      border: 1px solid rgba(102, 252, 241, 0.25);
+      border-radius: 18px;
       padding: 24px 20px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.85);
       text-align: center;
     }
     .brand-title {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 800;
       text-align: center;
-      letter-spacing: 1.5px;
+      letter-spacing: 2px;
       color: #66fcf1;
       margin-bottom: 12px;
+      text-shadow: 0 0 12px rgba(102, 252, 241, 0.4);
     }
     .role-tabs {
       display: flex;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.5);
       border-radius: 8px;
       padding: 4px;
       margin-bottom: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
     .role-btn {
       flex: 1;
       padding: 10px 4px;
       border: none;
       background: transparent;
-      color: #888;
+      color: #8fa0b5;
       font-size: 13px;
       font-weight: 600;
       border-radius: 6px;
       cursor: pointer;
+      transition: all 0.2s ease;
     }
     .role-btn.active {
       background: #45a29e;
       color: #ffffff;
+      box-shadow: 0 2px 8px rgba(69, 162, 158, 0.4);
     }
     .input-box {
       width: 100%;
       padding: 14px;
       border-radius: 8px;
       border: 1px solid #45a29e;
-      background: #0b0c10;
+      background: #07101c;
       color: #fff;
       font-size: 14px;
       outline: none;
       margin-bottom: 12px;
+    }
+    .input-box:focus {
+      border-color: #66fcf1;
+      box-shadow: 0 0 8px rgba(102, 252, 241, 0.3);
     }
     .action-btn {
       width: 100%;
@@ -106,9 +114,13 @@
       font-weight: 700;
       cursor: pointer;
       margin-bottom: 16px;
+      transition: 0.2s;
+    }
+    .action-btn:active {
+      transform: scale(0.98);
     }
     .notice-box {
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.55);
       border-radius: 10px;
       padding: 14px;
       font-size: 12px;
@@ -117,48 +129,84 @@
       text-align: left;
     }
     .text-green { color: #00ff66; font-weight: 600; }
-    .text-red { color: #ff3333; font-weight: 600; }
-    .text-orange { color: #ff9900; font-weight: 600; }
+    .text-red { color: #ff4757; font-weight: 600; }
     .text-gold { color: #ffd700; font-weight: 700; }
     
-    /* पॉप-अप मॉडल्स */
+    /* पॉप-अप बैकड्रॉप */
     .overlay-modal {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.95);
+      background: rgba(0, 0, 0, 0.88);
       z-index: 1000;
       justify-content: center;
       align-items: center;
       padding: 20px;
+      backdrop-filter: blur(8px);
     }
-    .modal-content {
+    
+    /* गोल्ड बॉर्डर कार्ड्स (स्क्रीनशॉट अनुसार) */
+    .popup-gold-box {
       width: 100%;
       max-width: 360px;
-      background: #12141a;
-      border: 1px solid #ff3333;
-      border-radius: 16px;
-      padding: 24px;
+      background: #10141d;
+      border: 1.5px solid #d4af37;
+      border-radius: 20px;
+      padding: 24px 20px;
       text-align: center;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.9);
     }
-
-    /* क्लीन कस्टम अलर्ट बॉक्स (बिना किसी यूआरएल के) */
-    .custom-alert-box {
-      border-color: #45a29e;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+    .popup-red-title {
+      color: #ff5252;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 12px;
     }
-    .custom-alert-btn {
-      margin-top: 15px;
-      padding: 10px 24px;
-      border: none;
-      border-radius: 6px;
-      background: #66fcf1;
-      color: #0b0c10;
-      font-weight: 700;
+    .popup-gold-title {
+      color: #e5b850;
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .popup-desc {
       font-size: 13px;
+      color: #d1d8e0;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .popup-btn-full {
+      width: 100%;
+      padding: 12px;
+      background: #232018;
+      border: 1px solid #8c783c;
+      color: #e5b850;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
       cursor: pointer;
+      margin-top: 10px;
+    }
+    .popup-btn-gold {
+      background: #d4a017;
+      border: none;
+      color: #0d0f14;
+      font-weight: 800;
     }
 
+    /* 2 मिनट काउंटडाउन बॉक्स */
+    .countdown-timer-box {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #66fcf1;
+      padding: 10px;
+      margin: 10px 0;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 10px;
+      border: 1px dashed rgba(102, 252, 241, 0.4);
+    }
+
+    /* मुख्य यूजर ऐप */
     .main-app {
       display: none;
       padding-bottom: 80px;
@@ -167,21 +215,27 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(11, 12, 16, 0.95);
-      backdrop-filter: blur(10px);
+      background: rgba(5, 12, 22, 0.92);
+      backdrop-filter: blur(12px);
       padding: 10px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(102, 252, 241, 0.15);
     }
     .timer-badge {
       font-size: 12px;
       font-weight: 700;
-      background: rgba(255, 51, 51, 0.15);
-      border: 1px solid #ff3333;
+      background: rgba(255, 71, 87, 0.15);
+      border: 1px solid #ff4757;
+      color: #ff6b81;
       padding: 4px 10px;
       border-radius: 20px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     .lang-btn {
       background: transparent;
@@ -189,35 +243,118 @@
       color: #66fcf1;
       font-size: 11px;
       font-weight: 700;
-      padding: 4px 10px;
+      padding: 4px 8px;
       border-radius: 6px;
       cursor: pointer;
     }
-    .section-title {
-      font-size: 15px;
+    .settings-btn {
+      background: rgba(102, 252, 241, 0.1);
+      border: 1px solid #66fcf1;
+      color: #66fcf1;
+      font-size: 16px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    /* सेटिंग्स स्लाइड मॉडल (स्क्रीनशॉट अनुसार) */
+    .settings-modal {
+      width: 100%;
+      max-width: 380px;
+      background: #0a1322;
+      border: 1px solid rgba(102, 252, 241, 0.3);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 20px 45px rgba(0,0,0,0.9);
+    }
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 12px;
+    }
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      cursor: pointer;
+    }
+    .setting-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .setting-icon {
+      font-size: 18px;
+      color: #66fcf1;
+      width: 24px;
+      text-align: center;
+    }
+    .setting-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .setting-sub {
+      font-size: 10px;
+      color: #8fa0b5;
+    }
+    .setting-arrow {
+      color: #556578;
+      font-size: 14px;
+    }
+    .logout-btn-box {
+      margin-top: 18px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(255, 71, 87, 0.1);
+      border: 1px solid #ff4757;
+      color: #ff4757;
       font-weight: 700;
-      margin: 18px 16px 10px;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* शेल्व्स और मीडिया कार्ड्स */
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin: 16px 16px 8px;
       letter-spacing: 0.5px;
+      color: #e0e8f0;
     }
     .shelf-container {
       display: flex;
       overflow-x: auto;
-      gap: 12px;
-      padding: 0 16px 10px;
+      gap: 10px;
+      padding: 0 16px 8px;
       scrollbar-width: none;
     }
     .shelf-container::-webkit-scrollbar { display: none; }
     .media-card {
-      flex: 0 0 140px;
-      background: #161820;
+      flex: 0 0 115px; /* स्क्रीन पर 3-4 कार्ड फिट होने के लिए कॉम्पैक्ट */
+      background: #0c1726;
       border-radius: 10px;
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
     .media-poster-box {
       width: 100%;
-      height: 190px;
-      background: #1f2833;
+      height: 155px;
+      background: #132237;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -231,15 +368,15 @@
       display: block;
     }
     .media-info {
-      padding: 8px;
+      padding: 6px;
     }
     .media-name {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .admin-panel {
       display: none;
@@ -248,7 +385,7 @@
       margin: 0 auto;
     }
     .admin-card {
-      background: #161820;
+      background: #0c1726;
       padding: 16px;
       border-radius: 12px;
       border: 1px solid #45a29e;
@@ -286,25 +423,170 @@
     </div>
   </div>
 
-  <!-- क्लीन कस्टम पॉप-अप (इसमें harsh123444 या URL कभी नहीं दिखेगा) -->
-  <div class="overlay-modal" id="customAlertModal">
-    <div class="modal-content custom-alert-box">
-      <div style="font-size: 32px; margin-bottom: 10px;" id="alertIcon">⚠️</div>
-      <h3 style="margin-bottom: 8px; font-size: 15px; color: #66fcf1;" id="alertTitle">सूचना</h3>
-      <div id="alertMessage" style="font-size: 13px; line-height: 1.6; color: #ccc;"></div>
-      <button class="custom-alert-btn" onclick="closeCustomAlert()">समझ गया (OK)</button>
+  <!-- 1. नाइट मोड सर्वर ऑफलाइन पॉप-अप -->
+  <div class="overlay-modal" id="modalNightMode">
+    <div class="popup-gold-box">
+      <div style="font-size: 28px; margin-bottom: 6px;">🌙</div>
+      <div class="popup-red-title">Server Offline</div>
+      <div class="popup-desc">
+        The server is currently offline for new access requests during night hours.
+      </div>
+      <div style="color: #ff5252; font-weight: 700; font-size: 13px; margin-bottom: 12px;">
+        Night Mode: 9:00 PM – 8:00 AM IST
+      </div>
+      <div class="popup-desc" style="font-size: 12px; color: #a4b0be;">
+        New requests may not be approved until service hours resume.<br><br>Existing sessions may continue.
+      </div>
+      <button class="popup-btn-full" onclick="closeModal('modalNightMode')">Got it (OK)</button>
     </div>
   </div>
 
-  <!-- Waiting / Audio-Visual Warning Overlay -->
-  <div class="overlay-modal" id="warningModal">
-    <div class="modal-content">
-      <div style="font-size: 36px; margin-bottom: 10px;" id="modalIcon">⏳</div>
-      <h3 style="margin-bottom: 10px; font-size: 16px;" id="modalTitle">Connecting to Verification Gate</h3>
-      <div id="modalBodyText" style="font-size: 13px; line-height: 1.6; margin-bottom: 14px; color: #ccc;">
-        Sending authorization alert to Telegram admin...
+  <!-- 2. ऑडियंस एक्सेस ऑफलाइन पॉप-अप -->
+  <div class="overlay-modal" id="modalAudienceOffline">
+    <div class="popup-gold-box">
+      <div style="font-size: 28px; margin-bottom: 6px; color: #ff5252;">🚫</div>
+      <div class="popup-red-title">Server Offline</div>
+      <div class="popup-desc">
+        The Audience Access service is currently unavailable.
       </div>
-      <div style="font-size: 11px; color: #ff3333; font-weight: 600;" id="modalStatusMsg">Screen locked until announcement finishes</div>
+      <div style="color: #ff5252; font-weight: 700; font-size: 13px; margin-bottom: 12px;">
+        Please try again during service hours.
+      </div>
+      <div class="popup-desc" style="font-size: 12px;">
+        Authorized VIP key holders can use the VIP Pass option.
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 14px;">
+        <button class="popup-btn-full" style="flex: 1;" onclick="closeModal('modalAudienceOffline')">Got it (OK)</button>
+        <button class="popup-btn-full popup-btn-gold" style="flex: 1;" onclick="openFreeVipModal()">How to Get VIP Key</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. गेट योर फ्री वीआईपी की पॉप-अप -->
+  <div class="overlay-modal" id="modalGetVipKey">
+    <div class="popup-gold-box">
+      <div style="font-size: 26px; margin-bottom: 6px; color: #ffd700;">🔑</div>
+      <div class="popup-gold-title">Get Your Free VIP Key</div>
+      <div class="popup-desc" style="color: #f1f2f6;">
+        Need a VIP Key to access StreamVault?
+      </div>
+      <div class="popup-desc" style="font-size: 12px; color: #ced6e0;">
+        No worries! You can request your VIP Key for free through our official Key Bot. Simply start the bot and claim your 24-hour key.
+      </div>
+      <div style="background: rgba(0, 255, 102, 0.1); border: 1px solid #00ff66; color: #00ff66; padding: 8px; border-radius: 8px; font-weight: 700; font-size: 12px; margin-bottom: 12px;">
+        100% Free — No Payment Required
+      </div>
+      <button class="popup-btn-full popup-btn-gold" onclick="window.open('https://t.me/StreamVaultKeyBot', '_blank')">
+        ✈️ Get Key from @StreamVaultKeyBot
+      </button>
+      <button class="popup-btn-full" style="border: none; background: transparent; color: #888;" onclick="closeModal('modalGetVipKey')">Close</button>
+    </div>
+  </div>
+
+  <!-- 4. 2-3 दिन टेम्परेरी मेंटेनेंस नोटिस -->
+  <div class="overlay-modal" id="modalTempMaintenance">
+    <div class="popup-gold-box">
+      <div class="popup-gold-title">Audience Access Notice</div>
+      <div class="popup-desc" style="font-size: 14px; margin: 15px 0;">
+        Access is temporarily unavailable.<br><br>Please try again later. Thank you for your patience.
+      </div>
+      <button class="popup-btn-full" onclick="closeModal('modalTempMaintenance')">OK</button>
+    </div>
+  </div>
+
+  <!-- 2-मिनट वेटिंग और लाइव काउंटडाउन मॉडल -->
+  <div class="overlay-modal" id="waitingApprovalModal">
+    <div class="popup-gold-box" style="border-color: #66fcf1;">
+      <div style="font-size: 32px; margin-bottom: 8px;">⏳</div>
+      <h3 style="color: #66fcf1; font-size: 16px; margin-bottom: 6px;" id="waitModalTitle">Connecting to Verification Gate</h3>
+      <div style="font-size: 12px; color: #bbb;" id="waitModalDesc">Alert sent to Telegram Admin. Waiting for instant approval...</div>
+      
+      <!-- लाइव 2 मिनट काउंटडाउन -->
+      <div class="countdown-timer-box" id="waitTimerNum">02:00</div>
+      
+      <div style="font-size: 11px; color: #ff6b81;" id="waitStatusMsg">Screen locked during verification</div>
+    </div>
+  </div>
+
+  <!-- सेटिंग्स स्लाइड मॉडल (फोटो के अनुसार) -->
+  <div class="overlay-modal" id="settingsModal">
+    <div class="settings-modal">
+      <div class="settings-header">
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; color: #66fcf1;">
+          <span>⚙️</span> Settings
+        </div>
+        <span style="font-size: 20px; cursor: pointer; color: #888;" onclick="closeModal('settingsModal')">✕</span>
+      </div>
+
+      <div class="setting-item" onclick="alert('Appearance: Deep Cosmic Nebula theme is active.')">
+        <div class="setting-left">
+          <div class="setting-icon">🎨</div>
+          <div>
+            <div class="setting-title">Appearance</div>
+            <div class="setting-sub">Theme, Background & Effects</div>
+          </div>
+        </div>
+        <div class="setting-arrow">›</div>
+      </div>
+
+      <div class="setting-item" onclick="toggleLang()">
+        <div class="setting-left">
+          <div class="setting-icon">🌐</div>
+          <div>
+            <div class="setting-title">Language</div>
+            <div class="setting-sub" id="settingsLangSub">English / हिंदी</div>
+          </div>
+        </div>
+        <div class="setting-arrow">›</div>
+      </div>
+
+      <div class="setting-item" onclick="alert('Playback: 1080p Full HD VIP Streaming enabled.')">
+        <div class="setting-left">
+          <div class="setting-icon">▶️</div>
+          <div>
+            <div class="setting-title">Playback</div>
+            <div class="setting-sub">Quality, Speed & Resolution</div>
+          </div>
+        </div>
+        <div class="setting-arrow">›</div>
+      </div>
+
+      <div class="setting-item" onclick="alert('Notifications: Real-time Telegram server updates are ON.')">
+        <div class="setting-left">
+          <div class="setting-icon">🔔</div>
+          <div>
+            <div class="setting-title">Notifications</div>
+            <div class="setting-sub">Alerts & Updates</div>
+          </div>
+        </div>
+        <div class="setting-arrow">›</div>
+      </div>
+
+      <div class="setting-item" onclick="alert('Privacy & Security: Device binding session protection active.')">
+        <div class="setting-left">
+          <div class="setting-icon">🛡️</div>
+          <div>
+            <div class="setting-title">Privacy & Security</div>
+            <div class="setting-sub">Account, Data & Safety</div>
+          </div>
+        </div>
+        <div class="setting-arrow">›</div>
+      </div>
+
+      <div class="setting-item" onclick="openFreeVipModal()">
+        <div class="setting-left">
+          <div class="setting-icon">❓</div>
+          <div>
+            <div class="setting-title">Help & Support</div>
+            <div class="setting-sub">FAQs, Contact Key Bot</div>
+          </div>
+        </div>
+        <div class="setting-arrow">›</div>
+      </div>
+
+      <div class="logout-btn-box" onclick="handleLogout()">
+        <span>🚪</span> Log Out
+      </div>
     </div>
   </div>
 
@@ -316,7 +598,12 @@
         <span style="font-size: 10px; font-weight: 700;" id="appHeaderStatusDot">●</span>
       </div>
       <div class="timer-badge" id="watchTimerDisplay">06:00:00</div>
-      <button class="lang-btn" onclick="toggleLang()" id="langBtnLabel">EN</button>
+      
+      <!-- दाईं तरफ (Right Side) भाषा और सेटिंग्स बटन -->
+      <div class="header-right">
+        <button class="lang-btn" onclick="toggleLang()" id="langBtnLabel">EN</button>
+        <div class="settings-btn" onclick="openModal('settingsModal')">⚙️</div>
+      </div>
     </header>
 
     <div class="section-title" id="shelf1Title">Hindi Dubbed Anime</div>
@@ -329,7 +616,8 @@
         </div>
         <div class="media-info">
           <div class="media-name">Hanaari Son: Next Life Ep 1</div>
-          <div style="display: flex; gap: 4px; font-size: 10px; margin-top: 4px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9px; margin-top: 2px;">
+            <span class="text-gold">★ 8.8</span>
             <span class="text-gold">1080p VIP</span>
           </div>
         </div>
@@ -338,7 +626,7 @@
       <div class="media-card">
         <div class="media-poster-box">
           <div style="font-size: 20px; margin-bottom: 4px; color: #666;">🔒</div>
-          <div style="font-size: 11px; color: #777;" class="csTag">Coming Soon</div>
+          <div style="font-size: 10px; color: #777;" class="csTag">Coming Soon</div>
         </div>
         <div class="media-info">
           <div class="media-name" style="color: #666;">Episode 2</div>
@@ -351,7 +639,7 @@
       <div class="media-card">
         <div class="media-poster-box">
           <div style="font-size: 20px; margin-bottom: 4px; color: #666;">🔒</div>
-          <div style="font-size: 11px; color: #777;" class="csTag">Coming Soon</div>
+          <div style="font-size: 10px; color: #777;" class="csTag">Coming Soon</div>
         </div>
         <div class="media-info">
           <div class="media-name" style="color: #666;">Subbed Library</div>
@@ -364,7 +652,7 @@
       <div class="media-card">
         <div class="media-poster-box">
           <div style="font-size: 20px; margin-bottom: 4px; color: #666;">🔒</div>
-          <div style="font-size: 11px; color: #777;" class="csTag">Coming Soon</div>
+          <div style="font-size: 10px; color: #777;" class="csTag">Coming Soon</div>
         </div>
         <div class="media-info">
           <div class="media-name" style="color: #666;">New Punjabi Title</div>
@@ -377,7 +665,7 @@
       <div class="media-card">
         <div class="media-poster-box">
           <div style="font-size: 20px; margin-bottom: 4px; color: #666;">🔒</div>
-          <div style="font-size: 11px; color: #777;" class="csTag">Coming Soon</div>
+          <div style="font-size: 10px; color: #777;" class="csTag">Coming Soon</div>
         </div>
         <div class="media-info">
           <div class="media-name" style="color: #666;">Action Blockbuster</div>
@@ -390,7 +678,7 @@
       <div class="media-card">
         <div class="media-poster-box">
           <div style="font-size: 20px; margin-bottom: 4px; color: #666;">🔒</div>
-          <div style="font-size: 11px; color: #777;" class="csTag">Coming Soon</div>
+          <div style="font-size: 10px; color: #777;" class="csTag">Coming Soon</div>
         </div>
         <div class="media-info">
           <div class="media-name" style="color: #666;">Kids Special</div>
@@ -425,7 +713,9 @@
       audienceKey: "AUD-45215391-AUD**6789",
       botToken: "8802197443:AAGqag49eRvL0KjF3KQDPEpvNAnIxzKgmZg",
       chatId: "6290776728",
-      animeUrl: "https://t.me/+TdAXfCAGjB5mNTVl"
+      animeUrl: "https://t.me/+TdAXfCAGjB5mNTVl",
+      // अगर कभी 2-3 दिन के लिए पूरी साइट बंद रखनी हो तो इसे true कर देना
+      isMaintenanceActive: false 
     };
 
     let selectedRole = "vip";
@@ -435,21 +725,23 @@
       : (6 * 3600);
     
     let timerInterval = null;
+    let waitInterval = null;
     let isServerOfflineTime = false;
 
-    // क्लीन कस्टम पॉप-अप ट्रिगर
-    function showCustomAlert(title, message, icon = "⚠️") {
-      document.getElementById("alertTitle").innerText = title;
-      document.getElementById("alertMessage").innerHTML = message;
-      document.getElementById("alertIcon").innerText = icon;
-      document.getElementById("customAlertModal").style.display = "flex";
+    // मॉडल दिखाने और बंद करने के फंक्शन्स
+    function openModal(id) {
+      document.getElementById(id).style.display = "flex";
+    }
+    function closeModal(id) {
+      document.getElementById(id).style.display = "none";
+    }
+    function openFreeVipModal() {
+      closeModal('modalAudienceOffline');
+      closeModal('settingsModal');
+      openModal('modalGetVipKey');
     }
 
-    function closeCustomAlert() {
-      document.getElementById("customAlertModal").style.display = "none";
-    }
-
-    // सर्वर टाइम चेक
+    // सर्वर टाइम चेक (रात 9 से सुबह 8)
     function checkLiveServerStatus() {
       const currentHour = new Date().getHours();
       isServerOfflineTime = (currentHour >= 21 || currentHour < 8);
@@ -459,14 +751,14 @@
       const appDot = document.getElementById("appHeaderStatusDot");
 
       if (isServerOfflineTime) {
-        if (dot) dot.style.color = "#ff3333";
+        if (dot) dot.style.color = "#ff4757";
         if (text) {
           text.innerText = currentLang === "hi" ? "सर्वर ऑफ (नाइट मोड)" : "Server Offline (Night Mode)";
-          text.style.color = "#ff3333";
+          text.style.color = "#ff4757";
         }
         if (appDot) {
           appDot.innerText = "● सर्वर ऑफ";
-          appDot.style.color = "#ff3333";
+          appDot.style.color = "#ff4757";
         }
       } else {
         if (dot) dot.style.color = "#00ff66";
@@ -494,65 +786,64 @@
       }
     }
 
+    // आईपी एड्रेस प्राप्त करना
+    async function fetchUserIP() {
+      try {
+        const res = await fetch("https://api.ipify.org?format=json");
+        const data = await res.json();
+        return data.ip || "Unknown IP";
+      } catch (e) {
+        return "IP Unavailable";
+      }
+    }
+
     async function initiateLogin() {
       const key = document.getElementById("passKeyInput").value.trim();
 
-      // 1. एडमिन की (24 घंटे पूरी छूट)
+      // अगर 2-3 दिन वाला मेंटेनेंस ऑन है
+      if (CONFIG.isMaintenanceActive) {
+        openModal("modalTempMaintenance");
+        return;
+      }
+
+      // 1. एडमिन की (डायरेक्ट एक्सेस)
       if (key === CONFIG.adminKey) {
         document.getElementById("gateScreen").style.display = "none";
         document.getElementById("adminApp").style.display = "block";
         return;
       }
 
-      // 2. आपकी VIP की (इस पर कोई रात/दिन की रोक नहीं होगी - 24 घंटे चलेगी)
-      if (key === CONFIG.vipKey) {
-        showWaitingModal();
-        await notifyAdminTelegram(key);
-        setTimeout(() => {
-          proceedToAudioGate();
-        }, 3500);
-        return;
-      }
-
-      // 3. ऑडियंस पास अभी बंद है
+      // 2. ऑडियंस पास ऑफलाइन पॉप-अप
       if (selectedRole === "audience") {
-        showCustomAlert(
-          "Notice", 
-          currentLang === "hi" 
-            ? "Audience server abhi maintenance par hai. Kripya VIP key use karein." 
-            : "Audience server under technical maintenance. Please use VIP key."
-        );
+        openModal("modalAudienceOffline");
         return;
       }
 
-      // 4. अगर रात का समय है तो अन्य नए यूज़र्स को ब्लॉक करें
-      if (isServerOfflineTime) {
-        showCustomAlert(
-          "Server Offline", 
-          currentLang === "hi"
-            ? "रात 9:00 बजे के बाद नए लॉगिन के लिए सर्वर ऑफ है। केवल पहले से एक्टिव सत्र काम करेंगे। कृपया सुबह 8:00 बजे प्रयास करें।"
-            : "Server is currently OFFLINE for new logins (Night Mode: 9 PM - 8 AM). Active sessions can continue.",
-          "🌙"
-        );
+      // 3. रात के समय अन्य यूजर ब्लॉक (नाइट मोड पॉप-अप)
+      if (isServerOfflineTime && key !== CONFIG.vipKey) {
+        openModal("modalNightMode");
         return;
       }
 
-      // 5. अमान्य की
-      showCustomAlert(
-        "Access Denied", 
-        currentLang === "hi" 
-          ? "Galat Pass-Key! Kripya check karke dobara daalein." 
-          : "Invalid Pass-Key. Please verify and retry.",
-        "❌"
-      );
+      // 4. वीआईपी की ऑथराइजेशन (2 मिनट वेटिंग + आईपी ट्रैकिंग)
+      if (key === CONFIG.vipKey) {
+        const userIP = await fetchUserIP();
+        await notifyAdminTelegram(key, userIP);
+        startTwoMinuteWaitGate();
+        return;
+      }
+
+      // 5. गलत की
+      alert(currentLang === "hi" ? "गलत पास-की! कृपया सही की दर्ज करें।" : "Invalid Pass-Key. Please verify and retry.");
     }
 
-    async function notifyAdminTelegram(userKey) {
+    // टेलीग्राम बॉट को आईपी और अलर्ट भेजना
+    async function notifyAdminTelegram(userKey, ipAddress) {
       const now = new Date();
       const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const deviceStr = navigator.userAgent.includes("Android") ? "Android Phone" : "Mobile Web";
+      const deviceStr = navigator.userAgent.includes("Android") ? "Android Device" : "Mobile Browser";
 
-      const msg = `🚨 *New Access Request*\n\n🔑 *Key:* \`${userKey}\`\n📱 *Device:* ${deviceStr}\n⏰ *Time:* ${timeStr}\n⏳ *Watch Left:* ${Math.floor(watchTimeBalance / 3600)}h ${Math.floor((watchTimeBalance % 3600) / 60)}m\n\n_Auto gate authorization active._`;
+      const msg = `🚨 *New StreamVault Login Request*\n━━━━━━━━━━━━━━━━━━\n🔑 *Key:* \`${userKey}\`\n🌐 *IP Address:* \`${ipAddress}\`\n📱 *Device:* ${deviceStr}\n⏰ *Time:* ${timeStr}\n⏳ *Wait Time:* 2 Minutes\n━━━━━━━━━━━━━━━━━━\n_Awaiting gate authorization._`;
 
       try {
         await fetch(`https://api.telegram.org/bot${CONFIG.botToken}/sendMessage`, {
@@ -569,67 +860,70 @@
       }
     }
 
-    function showWaitingModal() {
-      const modal = document.getElementById("warningModal");
-      document.getElementById("modalIcon").innerText = "⏳";
-      document.getElementById("modalTitle").innerText = currentLang === "hi" ? "Telegram Admin se Approval liya ja raha hai..." : "Requesting Telegram Approval...";
-      document.getElementById("modalBodyText").innerHTML = currentLang === "hi" 
-        ? "Aapki request Telegram bot ko bhej di gayi hai. Gate check ho raha hai..." 
-        : "Alert sent to admin bot. Awaiting response...";
-      modal.style.display = "flex";
+    // 2 मिनट का लाइव काउंटडाउन गेट
+    function startTwoMinuteWaitGate() {
+      openModal("waitingApprovalModal");
+      let totalSeconds = 120; // 2 मिनट = 120 सेकंड
+
+      const updateWaitUI = () => {
+        const m = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+        const s = String(totalSeconds % 60).padStart(2, "0");
+        document.getElementById("waitTimerNum").innerText = `${m}:${s}`;
+      };
+
+      updateWaitUI();
+
+      if (waitInterval) clearInterval(waitInterval);
+      waitInterval = setInterval(() => {
+        totalSeconds--;
+        updateWaitUI();
+
+        if (totalSeconds <= 0) {
+          clearInterval(waitInterval);
+          closeModal("waitingApprovalModal");
+          proceedToAudioGate();
+        }
+      }, 1000);
+
+      // टेस्टिंग के लिए: 4 सेकंड बाद अपने-आप ऑडियो गेट पर ले जाएगा
+      setTimeout(() => {
+        clearInterval(waitInterval);
+        closeModal("waitingApprovalModal");
+        proceedToAudioGate();
+      }, 4000);
     }
 
+    // शांत और मध्यम हिंदी वॉइस
     function proceedToAudioGate() {
-      document.getElementById("modalIcon").innerText = "⚠️";
-      document.getElementById("modalTitle").innerText = currentLang === "hi" ? "Zaroori Suchna aur Niyam" : "Verification Announcement";
-      
-      const noticeHtml = currentLang === "hi"
-        ? `Active: <span class="text-green">Subah 8 baje se raat 9 baje tak</span> instant approval.<br>
-           Night: <span class="text-red">Raat 9 baje se subah 8 baje tak</span> koi guarantee nahi.<br>
-           Limit: <span class="text-red">6 ghante active watch balance shuru</span>.`
-        : `Active: <span class="text-green">8:00 AM to 9:00 PM</span> instant approval.<br>
-           Night: <span class="text-red">9:00 PM to 8:00 AM</span> manual review, no guarantee.<br>
-           Limit: <span class="text-red">6 hours active watch balance active</span>.`;
-
-      document.getElementById("modalBodyText").innerHTML = noticeHtml;
-
       if ("speechSynthesis" in window) {
         window.speechSynthesis.cancel();
-        const speechText = currentLang === "hi"
-          ? "Login successful. Dhyan dein, subah aath baje se raat nau baje tak instant approval hota hai. Raat nau baje ke baad approval ki guarantee nahi hai. Aapka chhe ghante ka watch balance ab chalu hai."
-          : "Login successful. Please note, access from 8 AM to 9 PM is processed instantly. Night hours have no approval guarantee. Your six hour watch balance is now active.";
-
+        
+        const speechText = "लॉगिन सफल रहा। आपका छह घंटे का वॉच बैलेंस शुरू हो चुका है। स्ट्रीम वॉल्ट में आपका स्वागत है।";
         const utterance = new SpeechSynthesisUtterance(speechText);
-        utterance.rate = 0.85;
+        
+        utterance.lang = "hi-IN";
+        utterance.volume = 0.6; // मध्यम और सॉफ्ट वॉल्यूम
+        utterance.rate = 0.82;   // धीमी और साफ़ गति
         utterance.pitch = 1.0;
 
         utterance.onend = function() {
-          setTimeout(() => {
-            document.getElementById("warningModal").style.display = "none";
-            document.getElementById("gateScreen").style.display = "none";
-            document.getElementById("mainApp").style.display = "block";
-            startWatchTimer();
-          }, 800);
+          finishLoginToApp();
         };
 
         utterance.onerror = function() {
-          setTimeout(() => {
-            document.getElementById("warningModal").style.display = "none";
-            document.getElementById("gateScreen").style.display = "none";
-            document.getElementById("mainApp").style.display = "block";
-            startWatchTimer();
-          }, 4000);
+          finishLoginToApp();
         };
 
         window.speechSynthesis.speak(utterance);
       } else {
-        setTimeout(() => {
-          document.getElementById("warningModal").style.display = "none";
-          document.getElementById("gateScreen").style.display = "none";
-          document.getElementById("mainApp").style.display = "block";
-          startWatchTimer();
-        }, 5000);
+        finishLoginToApp();
       }
+    }
+
+    function finishLoginToApp() {
+      document.getElementById("gateScreen").style.display = "none";
+      document.getElementById("mainApp").style.display = "block";
+      startWatchTimer();
     }
 
     function startWatchTimer() {
@@ -644,8 +938,8 @@
             updateTimerBadge();
           } else {
             clearInterval(timerInterval);
-            showCustomAlert("Time Expired", currentLang === "hi" ? "Aapka 6 ghante ka samay khatam ho gaya hai!" : "Your 6 hours session balance has ended!");
-            setTimeout(() => location.reload(), 2000);
+            alert(currentLang === "hi" ? "आपका 6 घंटे का समय समाप्त हो गया है!" : "Your 6 hours session balance has ended!");
+            setTimeout(() => location.reload(), 1500);
           }
         }
       }, 1000);
@@ -699,13 +993,20 @@
       }
     }
 
+    function handleLogout() {
+      closeModal('settingsModal');
+      document.getElementById("mainApp").style.display = "none";
+      document.getElementById("gateScreen").style.display = "flex";
+      document.getElementById("passKeyInput").value = "";
+    }
+
     function addNewContentCard() {
       const title = document.getElementById("newMediaTitle").value.trim();
       const link = document.getElementById("newMediaLink").value.trim();
       const shelf = document.getElementById("newMediaShelf").value;
 
       if (!title || !link) {
-        showCustomAlert("Error", "Title aur link dono daalein.");
+        alert("Title aur link dono daalein.");
         return;
       }
 
@@ -714,13 +1015,13 @@
       card.style.cursor = "pointer";
       card.onclick = () => window.open(link, "_blank");
       card.innerHTML = `
-        <div class="media-poster-box" style="background: #252e3d;">
-          <div style="font-size: 28px; margin-bottom: 4px;">🎬</div>
-          <div style="font-size: 10px; color: #ffd700; font-weight: 700;">NEW RELEASE</div>
+        <div class="media-poster-box" style="background: #132237;">
+          <div style="font-size: 24px; margin-bottom: 4px;">🎬</div>
+          <div style="font-size: 9px; color: #ffd700; font-weight: 700;">NEW</div>
         </div>
         <div class="media-info">
           <div class="media-name">${title}</div>
-          <div style="font-size: 10px; color: #ff9900;">1080p VIP</div>
+          <div style="font-size: 9px; color: #ff9900;">1080p VIP</div>
         </div>
       `;
 
@@ -730,7 +1031,7 @@
         document.getElementById("punjabiShelf").prepend(card);
       }
 
-      showCustomAlert("Success", "Content card kamyabi se add ho gaya!", "✅");
+      alert("Content card successfully add ho gaya!");
       document.getElementById("newMediaTitle").value = "";
       document.getElementById("newMediaLink").value = "";
     }
